@@ -15,14 +15,13 @@
 void	print_error(int x)
 {
 	if (x == 1)
-	{
 		printf("Error: wrong number of arguments\n");
-		return ;
-	}
 	if (x == 2)
 		printf("Error: mutex is uninitialized or corrupted\n");
 	if (x == 3)
 		printf("Error: allocation failure\n");
+  if (x == 4)
+	  printf("Error: unable to create a Thread\n");
 	else
 		printf("Error : invalid arguments\n");
 }

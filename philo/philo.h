@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 22:57:46 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/13 22:57:46 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/14 18:24:53 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_phil
 	long			last_meal_time;
 	int				eat_count;
 	pthread_mutex_t	local_mutex;
-	t_data			*data;
+	//t_data			*data;
 }					t_phil;
 
 int					check_args(int ac, char **av);
@@ -49,3 +49,6 @@ void				destroy_main_mutexes(t_data *data);
 void				destroy_mutex_data(t_data *data, int fork_index);
 void				destroy_lmutex(t_phil **phil, int start_index);
 void				print_error(int x);
+long				ft_atol(char *arg);
+int					create_philosophers(t_data *data, t_phil **phil);
+int					create_forks(t_data *data);

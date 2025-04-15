@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:07:27 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/14 15:07:27 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/14 18:26:18 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int	init_data(t_data *data, char **av)
 	if (pthread_mutex_init(&data->dead_mutex, NULL))
 	{
 		pthread_mutex_destroy(&data->write_mutex);
-		pthrelaiiad_mutex_destroy(&data->helper_mutex);
+		pthread_mutex_destroy(&data->helper_mutex);
 		return (0);
 	}
-	data->start_time = get_current_time();
+	//data->start_time = get_current_time();
 	return (1);
 }
 
@@ -53,17 +53,17 @@ int	create_philosophers(t_data *data, t_phil **phil)
 	if (!*phil)
 		return (print_error(3), 0);
 	i = -1;
-	while (++i <= data->num_philos)
+	while (++i < data->num_philos)
 	{
 		(*phil)[i].id = i + 1;
 		(*phil)[i].left_fork = &data->forks[i];
 		(*phil)[i].right_fork = &data->forks[(i + 1) % data->num_philos];
 		(*phil)[i].last_meal_time = data->start_time;
 		(*phil)[i].eat_count = 0;
-		(*phil)[i].data = data;
-		if (pthread_mutex_init(&(*philos)[i].local_mutex, NULL))
+		//(*phil)[i].data = data;
+		if (pthread_mutex_init(&(*phil)[i].local_mutex, NULL))
 			return (print_error(2), destroy_mutex_data(data, i),
-				destroy_lmutex(philo, i), free(data->forks), 0);
+				destroy_lmutex(phil, i), free(data->forks), 0);
 	}
 	return (1);
 }
