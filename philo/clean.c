@@ -31,3 +31,16 @@ void destroy_lmutex(t_phil **phil, int start_index)
   while (--start_index >= 0)
     pthread_mutex_destroy(&(*phil)[i].local_mutex);
 }
+void destroy_all(t_data *data, t_phil *phil, int start)
+{
+  destroy_mutex_data(data, start);
+  destroy_lmutex(&phil, start);
+}
+
+void  ft_free(void *ptr1, void *ptr2, void *ptr3)
+{
+  if (ptr3)
+    free(ptr3);
+  free(ptr1);
+  free(ptr2);
+}

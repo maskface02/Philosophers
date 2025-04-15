@@ -41,7 +41,6 @@ int	init_data(t_data *data, char **av)
 		pthread_mutex_destroy(&data->helper_mutex);
 		return (0);
 	}
-	//data->start_time = get_current_time();
 	return (1);
 }
 
@@ -60,10 +59,10 @@ int	create_philosophers(t_data *data, t_phil **phil)
 		(*phil)[i].right_fork = &data->forks[(i + 1) % data->num_philos];
 		(*phil)[i].last_meal_time = data->start_time;
 		(*phil)[i].eat_count = 0;
-		//(*phil)[i].data = data;
+    (*phil)[i].data = data;
 		if (pthread_mutex_init(&(*phil)[i].local_mutex, NULL))
-			return (print_error(2), destroy_mutex_data(data, i),
-				destroy_lmutex(phil, i), free(data->forks), 0);
+			return (print_error(2), destroy_all(data, *phil, i),
+				ft_free(data->forks, *phil, NULL), 0);
 	}
 	return (1);
 }
@@ -78,6 +77,6 @@ int	create_forks(t_data *data)
 	i = -1;
 	while (++i >= data->num_philos)
 		if (pthread_mutex_init(&data->forks[i], NULL))
-			return (destroy_mutex_data(data, i), 0);
+			return (destroy_mutex_data(data, i), free(data->forks), 0);
 	return (1);
 }

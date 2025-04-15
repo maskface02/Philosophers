@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h" 
-
+#include "philo.h"
 
 long	ft_atol(char *arg)
 {
@@ -36,32 +35,28 @@ long	ft_atol(char *arg)
 	return (res * sign);
 }
 
-int is_num(char *arg)
+int	is_num(char *arg)
 {
-  int i;
+	int	i;
 
-  i = 0;
-  if (arg[i] == '+')
-    ++i;
-  while (arg[i])
-  {
-    if (!(arg[i] >= '0' && arg[i] <= '9'))
-      return (0);
-    i++;
-  }
-  if (ft_atol(arg) == LONG_MAX || ft_atol(arg) < 0)
-    return (0);
-  return (1);
+	i = 0;
+	if (arg[i] == '+')
+		++i;
+	while (arg[i])
+	{
+		if (!(arg[i] >= '0' && arg[i] <= '9'))
+			return (0);
+		i++;
+	}
+	if (ft_atol(arg) == LONG_MAX || ft_atol(arg) <= 0)
+		return (0);
+	return (1);
 }
 
-int check_args(int ac, char **av)
+int	check_args(int ac, char **av)
 {
-  while (--ac >= 0)
-    if (!is_num(av[ac]))
-      return (0);
-  return (1);
+	while (--ac >= 0)
+		if (!is_num(av[ac]))
+			return (0);
+	return (1);
 }
-
-
-
-

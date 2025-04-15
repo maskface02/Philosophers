@@ -40,7 +40,7 @@ typedef struct s_phil
 	long			last_meal_time;
 	int				eat_count;
 	pthread_mutex_t	local_mutex;
-	//t_data			*data;
+	t_data			*data;
 }					t_phil;
 
 int					check_args(int ac, char **av);
