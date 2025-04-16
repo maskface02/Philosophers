@@ -43,7 +43,7 @@ int	main(int ac, char **av)
 			return (1);
     if (!start_simulation(&data, philos))
       return (1);
-    destroy_all(&data, philos); //TODO
+    clean_destroy_all(&data, philos); //TODO
 	}
 	else
 		return (print_error(1), 1);

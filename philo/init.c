@@ -6,19 +6,11 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:07:27 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/14 18:26:18 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/15 23:47:41 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-long	get_current_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec / 1000);
-}
 
 int	init_data(t_data *data, char **av)
 {
@@ -33,12 +25,12 @@ int	init_data(t_data *data, char **av)
 	data->dead_flag = 0;
 	if (pthread_mutex_init(&data->write_mutex, NULL))
 		return (0);
-	if (pthread_mutex_init(&data->helper_mutex, NULL))
+	if (pthread_mutex_init(&data->meal_mutex, NULL))
 		return (pthread_mutex_destroy(&data->write_mutex), 0);
 	if (pthread_mutex_init(&data->dead_mutex, NULL))
 	{
 		pthread_mutex_destroy(&data->write_mutex);
-		pthread_mutex_destroy(&data->helper_mutex);
+		pthread_mutex_destroy(&data->meal_mutex);
 		return (0);
 	}
 	return (1);
@@ -59,10 +51,7 @@ int	create_philosophers(t_data *data, t_phil **phil)
 		(*phil)[i].right_fork = &data->forks[(i + 1) % data->num_philos];
 		(*phil)[i].last_meal_time = data->start_time;
 		(*phil)[i].eat_count = 0;
-    (*phil)[i].data = data;
-		if (pthread_mutex_init(&(*phil)[i].local_mutex, NULL))
-			return (print_error(2), destroy_all(data, *phil, i),
-				ft_free(data->forks, *phil, NULL), 0);
+		(*phil)[i].data = data;
 	}
 	return (1);
 }
@@ -77,6 +66,6 @@ int	create_forks(t_data *data)
 	i = -1;
 	while (++i >= data->num_philos)
 		if (pthread_mutex_init(&data->forks[i], NULL))
-			return (destroy_mutex_data(data, i), free(data->forks), 0);
+			return (destroy_mutex_data(data, i), 0);
 	return (1);
 }
