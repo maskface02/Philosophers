@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:15:51 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/16 01:07:49 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:21:43 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,20 @@ void	*philo_routine(void *arg)
 	phil = (t_phil *)arg;
 	if (phil->data->num_philos == 1)
 		return (one_philo_routine(phil));
-  if (phil->id % 2)
+	if (phil->id % 2)
 		usleep(1000);
 	while (1)
 	{
 		if (!take_forks(phil))
-      break;
+			break ;
 		eat(phil);
-    if (phil->data->dead_flag)
-    {
-      releas_forks(phil);
-      break;
-    }
-		releas_forks(phil);
+		release_forks(phil);
+		if (phil->data->dead_flag || ((phil->data->must_eat != -1)
+				&& (phil->eat_count >= phil->data->must_eat)))
+			break ;
 		log_message(phil, "is sleeping\n");
-    if (phil->data->dead_flag)
-      break;
+		if (phil->data->dead_flag)
+			break ;
 		usleep(phil->data->time_to_sleep * 1000);
 		log_message(phil, "is thinking\n");
 	}
@@ -59,10 +57,11 @@ void	*monitor_routine(void *arg)
 int	start_simulation(t_data *data, t_phil *phil)
 {
 	pthread_t *(threads), (monitor);
-	int(i) = -1;
+	int (i) = -1;
 	threads = malloc(data->num_philos * sizeof(pthread_t));
 	if (!threads)
 		return (print_error(3), 0);
+	data->start_time = get_current_time();
 	while (++i < data->num_philos)
 	{
 		if (pthread_create(&threads[i], NULL, philo_routine, &phil[i]))
@@ -73,7 +72,7 @@ int	start_simulation(t_data *data, t_phil *phil)
 	}
 	if (pthread_create(&monitor, NULL, monitor_routine, &data))
 	{
-    destroy_mutex_data(data, data->num_philos);
+		destroy_mutex_data(data, data->num_philos);
 		return (ft_free(data->forks, phil, threads), print_error(4), 0);
 	}
 	i = -1;

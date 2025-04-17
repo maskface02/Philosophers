@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 22:57:46 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/16 01:06:36 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/17 14:15:45 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,6 @@ void				ft_free(void *ptr1, void *ptr2, void *ptr3);
 long				get_current_time(void);
 void				log_message(t_phil *phil, char *msg);
 int					take_forks(t_phil *phil);
-void				releas_forks(t_phil *phil);
+void				release_forks(t_phil *phil);
 void        eat(t_phil *phil);
 int	        start_simulation(t_data *data, t_phil *phil);
