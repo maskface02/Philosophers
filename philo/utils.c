@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 23:46:39 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/17 14:15:36 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 03:13:48 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ long	get_current_time(void)
 
 void	log_message(t_phil *phil, char *msg)
 {
-	t_data	*data;
+	t_data	*data;// like this !!
 	long	timestamp;
 
-	data = phil->data;
+	data = phil->data;// !!
 	pthread_mutex_lock(&data->write_mutex);
 	if (!data->dead_flag)
 	{

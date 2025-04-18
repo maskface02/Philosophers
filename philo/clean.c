@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:59:22 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/16 00:56:24 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 03:02:57 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void  destroy_main_mutexes(t_data *data)
 {
   pthread_mutex_destroy(&data->meal_mutex);
   pthread_mutex_destroy(&data->write_mutex);
-  pthread_mutex_destroy(&data->dead_mutex);
 }
 
 void  destroy_mutex_data(t_data *data, int start_index)

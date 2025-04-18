@@ -6,12 +6,11 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:15:51 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/18 02:59:24 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 03:00:18 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <unistd.h>
 
 void	*one_philo_routine(t_phil *phil)
 {
@@ -75,9 +74,9 @@ void	monitor(t_phil *phil)
 	}
 }
 
-int	start_simulation(t_data *data, t_phil *phil)
+int	start_simulation(t_data *data, t_phil *phil)//remainder only PHIL
 {
-	pthread_t *(threads), (monitor);
+	pthread_t *(threads);
 	int (i) = -1;
 	threads = malloc(data->num_philos * sizeof(pthread_t));
 	if (!threads)

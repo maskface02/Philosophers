@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:07:27 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/15 23:47:41 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 03:02:13 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@ int	init_data(t_data *data, char **av)
 		return (0);
 	if (pthread_mutex_init(&data->meal_mutex, NULL))
 		return (pthread_mutex_destroy(&data->write_mutex), 0);
-	if (pthread_mutex_init(&data->dead_mutex, NULL))
-	{
-		pthread_mutex_destroy(&data->write_mutex);
-		pthread_mutex_destroy(&data->meal_mutex);
-		return (0);
-	}
 	return (1);
 }
 
@@ -64,7 +58,7 @@ int	create_forks(t_data *data)
 	if (!data->forks)
 		return (destroy_main_mutexes(data), print_error(3), 0);
 	i = -1;
-	while (++i >= data->num_philos)
+	while (++i < data->num_philos)
 		if (pthread_mutex_init(&data->forks[i], NULL))
 			return (destroy_mutex_data(data, i), 0);
 	return (1);
