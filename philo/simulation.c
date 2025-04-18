@@ -6,11 +6,12 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 18:15:51 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/17 14:21:43 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 02:59:24 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <unistd.h>
 
 void	*one_philo_routine(t_phil *phil)
 {
@@ -46,12 +47,32 @@ void	*philo_routine(void *arg)
 	return (NULL);
 }
 
-void	*monitor_routine(void *arg)
+void	monitor(t_phil *phil)
 {
-	t_data	*data;
-
-	data = (t_data *)arg;
-	return (NULL);
+	int (all_ate_enough), (i);
+	while (!phil->data->dead_flag)
+	{
+		(1) && (all_ate_enough = 1, i = -1);
+		while (++i < phil->data->num_philos)
+		{
+			if ((get_current_time()
+					- phil[i].last_meal_time) > phil->data->time_to_die)
+			{
+				log_message(&phil[i], "died\n");
+				phil->data->dead_flag = 1;
+				break ;
+			}
+			if (phil->data->must_eat != -1
+				&& phil[i].eat_count < phil->data->must_eat)
+				all_ate_enough = 0;
+		}
+		if (phil->data->must_eat != -1 && all_ate_enough)
+		{
+			phil->data->dead_flag = 1;
+			break ;
+		}
+		usleep(1000);
+	}
 }
 
 int	start_simulation(t_data *data, t_phil *phil)
@@ -70,15 +91,10 @@ int	start_simulation(t_data *data, t_phil *phil)
 			return (ft_free(data->forks, phil, threads), print_error(4), 0);
 		}
 	}
-	if (pthread_create(&monitor, NULL, monitor_routine, &data))
-	{
-		destroy_mutex_data(data, data->num_philos);
-		return (ft_free(data->forks, phil, threads), print_error(4), 0);
-	}
+	monitor(phil);
 	i = -1;
 	while (++i < data->num_philos)
 		pthread_join(threads[i], NULL);
-	pthread_join(monitor, NULL);
 	free(threads);
 	return (1);
 }
