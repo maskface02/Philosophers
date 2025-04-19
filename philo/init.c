@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
+/*   By: zatais <zatais@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 15:07:27 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/18 03:02:13 by zatais           ###   ########.fr       */
+/*   Created: 2025/04/18 21:36:43 by zatais            #+#    #+#             */
+/*   Updated: 2025/04/18 23:12:55 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "philo.h"
 
@@ -30,22 +31,22 @@ int	init_data(t_data *data, char **av)
 	return (1);
 }
 
-int	create_philosophers(t_data *data, t_phil **phil)
+int	init_philosophers(t_data data, t_phil **phil)
 {
 	int	i;
 
-	*phil = malloc(data->num_philos * sizeof(t_phil));
+	*phil = malloc(data.num_philos * sizeof(t_phil));
 	if (!*phil)
 		return (print_error(3), 0);
 	i = -1;
-	while (++i < data->num_philos)
+	while (++i < data.num_philos)
 	{
 		(*phil)[i].id = i + 1;
-		(*phil)[i].left_fork = &data->forks[i];
-		(*phil)[i].right_fork = &data->forks[(i + 1) % data->num_philos];
-		(*phil)[i].last_meal_time = data->start_time;
+		(*phil)[i].left_fork = &data.forks[i];
+		(*phil)[i].right_fork = &data.forks[(i + 1) % data.num_philos];
+		(*phil)[i].last_meal_time = data.start_time;
 		(*phil)[i].eat_count = 0;
-		(*phil)[i].data = data;
+		(*phil)[i].data = &data;
 	}
 	return (1);
 }

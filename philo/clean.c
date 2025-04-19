@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:59:22 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/18 03:02:57 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 22:06:02 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,10 @@ void  ft_free(void *ptr1, void *ptr2, void *ptr3)
     free(ptr3);
   free(ptr1);
   free(ptr2);
+}
+
+void  clean_destroy_all(t_phil *phil)
+{
+  destroy_mutex_data(phil->data, phil->data->num_philos);
+  ft_free(phil->data->forks, phil, NULL);
 }

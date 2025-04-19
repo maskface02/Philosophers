@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 22:57:46 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/17 14:15:45 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 22:14:23 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_data
 {
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	write_mutex;
-	pthread_mutex_t	dead_mutex;
 	int				dead_flag;
 	long			start_time;
 	int				num_philos;
@@ -48,7 +47,7 @@ void				destroy_main_mutexes(t_data *data);
 void				destroy_mutex_data(t_data *data, int fork_index);
 void				print_error(int x);
 long				ft_atol(char *arg);
-int					create_philosophers(t_data *data, t_phil **phil);
+int	        init_philosophers(t_data data, t_phil **phil);
 int					create_forks(t_data *data);
 void				ft_free(void *ptr1, void *ptr2, void *ptr3);
 long				get_current_time(void);
@@ -56,4 +55,6 @@ void				log_message(t_phil *phil, char *msg);
 int					take_forks(t_phil *phil);
 void				release_forks(t_phil *phil);
 void        eat(t_phil *phil);
-int	        start_simulation(t_data *data, t_phil *phil);
+int	        start_simulation(t_phil *phil);
+void        clean_destroy_all(t_phil *phil);
+

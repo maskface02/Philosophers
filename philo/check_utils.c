@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:26:52 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/14 14:34:15 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/18 22:20:30 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	is_num(char *arg)
 
 int	check_args(int ac, char **av)
 {
-	while (--ac >= 0)
+	while (--ac > 0)
 		if (!is_num(av[ac]))
 			return (0);
 	return (1);

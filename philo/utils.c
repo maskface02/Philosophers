@@ -6,7 +6,7 @@
 /*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 23:46:39 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/18 03:13:48 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/19 01:23:31 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	take_forks(t_phil *phil)
 		pthread_mutex_unlock(phil->left_fork);
 		return (0);
 	}
-	log_message(phil, "has taken a fork\n");
+	log_message(phil, "has taken a fork");
 	pthread_mutex_lock(phil->right_fork);
 	if (phil->data->dead_flag)
 	{
@@ -51,7 +51,7 @@ int	take_forks(t_phil *phil)
 		pthread_mutex_unlock(phil->left_fork);
 		return (0);
 	}
-	log_message(phil, "has taken a fork\n");
+	log_message(phil, "has taken a fork");
 	return (1);
 }
 

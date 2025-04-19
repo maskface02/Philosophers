@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
+/*   By: zatais <zatais@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/13 23:24:56 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/14 14:50:29 by zatais           ###   ########.fr       */
+/*   Created: 2025/04/18 21:35:56 by zatais            #+#    #+#             */
+/*   Updated: 2025/04/18 22:10:40 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ int	main(int ac, char **av)
 			return (print_error(2), 1);
 		if (!create_forks(&data))
 			return (1);
-		if (!create_philosophers(&data, &philos))
+		if (!init_philosophers(data , &philos))
 			return (1);
-    if (!start_simulation(&data, philos))
+    if (!start_simulation(philos))
       return (1);
-    clean_destroy_all(&data, philos); //TODO
+    clean_destroy_all(philos);
 	}
 	else
 		return (print_error(1), 1);
