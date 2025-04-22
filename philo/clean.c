@@ -15,7 +15,7 @@
 
 void  destroy_main_mutexes(t_data *data)
 {
-  pthread_mutex_destroy(&data->meal_mutex);
+  pthread_mutex_destroy(&data->dead_mutex);
   pthread_mutex_destroy(&data->write_mutex);
 }
 
@@ -36,6 +36,10 @@ void  ft_free(void *ptr1, void *ptr2, void *ptr3)
 
 void  clean_destroy_all(t_phil *phil)
 {
+  int i;
   destroy_mutex_data(phil->data, phil->data->num_philos);
+  i = -1;
+  while (++i < phil->data->num_philos)
+    pthread_mutex_destroy(&phil[i].meal_mutex);
   ft_free(phil->data->forks, phil, NULL);
 }

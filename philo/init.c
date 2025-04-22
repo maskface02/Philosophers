@@ -5,13 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zatais <zatais@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/18 21:36:43 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/18 23:12:55 by zatais           ###   ########.fr       */
+/*   Created: 2025/04/14 15:07:27 by zatais            #+#    #+#             */
+/*   Updated: 2025/04/18 03:02:13 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
+
 
 int	init_data(t_data *data, char **av)
 {
@@ -26,27 +26,28 @@ int	init_data(t_data *data, char **av)
 	data->dead_flag = 0;
 	if (pthread_mutex_init(&data->write_mutex, NULL))
 		return (0);
-	if (pthread_mutex_init(&data->meal_mutex, NULL))
+	if (pthread_mutex_init(&data->dead_mutex, NULL))
 		return (pthread_mutex_destroy(&data->write_mutex), 0);
 	return (1);
 }
 
-int	init_philosophers(t_data data, t_phil **phil)
+int	init_philosophers(t_data *data, t_phil **phil)
 {
 	int	i;
 
-	*phil = malloc(data.num_philos * sizeof(t_phil));
+	*phil = malloc(data->num_philos * sizeof(t_phil));
 	if (!*phil)
 		return (print_error(3), 0);
 	i = -1;
-	while (++i < data.num_philos)
+	while (++i < data->num_philos)
 	{
 		(*phil)[i].id = i + 1;
-		(*phil)[i].left_fork = &data.forks[i];
-		(*phil)[i].right_fork = &data.forks[(i + 1) % data.num_philos];
-		(*phil)[i].last_meal_time = data.start_time;
+		(*phil)[i].left_fork = &data->forks[i];
+		(*phil)[i].right_fork = &data->forks[(i + 1) % data->num_philos];
 		(*phil)[i].eat_count = 0;
-		(*phil)[i].data = &data;
+		(*phil)[i].data = data;
+    if (pthread_mutex_init(&(*phil)[i].meal_mutex , NULL))
+      return (print_error(2), clean_destroy_all(*phil), 0);
 	}
 	return (1);
 }

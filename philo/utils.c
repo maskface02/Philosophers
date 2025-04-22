@@ -22,30 +22,40 @@ long	get_current_time(void)
 
 void	log_message(t_phil *phil, char *msg)
 {
-	t_data	*data;// like this !!
+	t_data	*data;
 	long	timestamp;
+	int		is_dead;
 
-	data = phil->data;// !!
+	data = phil->data;
+	pthread_mutex_lock(&data->dead_mutex);
+	is_dead = data->dead_flag;
+	pthread_mutex_unlock(&data->dead_mutex);
 	pthread_mutex_lock(&data->write_mutex);
-	if (!data->dead_flag)
-	{
-		timestamp = get_current_time() - data->start_time;
-		printf("%ld %d %s\n", timestamp, phil->id, msg);
-	}
+	timestamp = get_current_time() - data->start_time;
+  if (!is_dead)
+	  printf("%ld %d %s\n", timestamp, phil->id, msg);
 	pthread_mutex_unlock(&data->write_mutex);
 }
 
 int	take_forks(t_phil *phil)
 {
+	int	is_dead;
+
 	pthread_mutex_lock(phil->left_fork);
-	if (phil->data->dead_flag)
+	pthread_mutex_lock(&phil->data->dead_mutex);
+	is_dead = phil->data->dead_flag;
+	pthread_mutex_unlock(&phil->data->dead_mutex);
+	if (is_dead)
 	{
 		pthread_mutex_unlock(phil->left_fork);
 		return (0);
 	}
 	log_message(phil, "has taken a fork");
 	pthread_mutex_lock(phil->right_fork);
-	if (phil->data->dead_flag)
+	pthread_mutex_lock(&phil->data->dead_mutex);
+	is_dead = phil->data->dead_flag;
+	pthread_mutex_unlock(&phil->data->dead_mutex);
+	if (is_dead)
 	{
 		pthread_mutex_unlock(phil->right_fork);
 		pthread_mutex_unlock(phil->left_fork);
@@ -57,13 +67,18 @@ int	take_forks(t_phil *phil)
 
 void	eat(t_phil *phil)
 {
-	pthread_mutex_lock(&phil->data->meal_mutex);
+  int is_dead;
+
+	pthread_mutex_lock(&phil->meal_mutex);
 	phil->last_meal_time = get_current_time();
 	phil->eat_count++;
-	pthread_mutex_unlock(&phil->data->meal_mutex);
-	log_message(phil, "is eating");
+	pthread_mutex_unlock(&phil->meal_mutex);
+  pthread_mutex_lock(&phil->data->dead_mutex);
+	is_dead = phil->data->dead_flag;
+	pthread_mutex_unlock(&phil->data->dead_mutex);
+  if (!is_dead)
+	  log_message(phil, "is eating");
 	if (phil->data->dead_flag)
-		return ;
 	usleep(phil->data->time_to_eat * 1000);
 }
 

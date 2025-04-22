@@ -49,27 +49,50 @@ void	*philo_routine(void *arg)
 
 void	monitor(t_phil *phil)
 {
-	int(all_ate_enough), (i);
-	while (!phil->data->dead_flag)
+	t_data	*data;
+	int		all_ate_enough;
+	int		i;
+	long	last_meal;
+	int		eat_count;
+
+	data = phil->data;
+	while (1)
 	{
-		(1) && (all_ate_enough = 1, i = -1);
-		while (++i < phil->data->num_philos)
+		all_ate_enough = 1;
+		i = -1;
+		while (++i < data->num_philos)
 		{
-			if ((get_current_time()
-					- phil[i].last_meal_time) > phil->data->time_to_die)
+			pthread_mutex_lock(&phil[i].meal_mutex);
+			last_meal = phil[i].last_meal_time;
+			pthread_mutex_unlock(&phil[i].meal_mutex);
+			if ((get_current_time() - last_meal) > data->time_to_die)
 			{
-				log_message(&phil[i], "died");
-				phil->data->dead_flag = 1;
-				break ;
+				pthread_mutex_lock(&data->dead_mutex);
+				if (!data->dead_flag)
+				{
+					pthread_mutex_lock(&data->write_mutex);
+					printf("%ld %d died\n", get_current_time()
+						- data->start_time, phil[i].id);
+					pthread_mutex_unlock(&data->write_mutex);
+			    pthread_mutex_lock(&data->dead_mutex);
+			    data->dead_flag = 1;
+		    	pthread_mutex_unlock(&data->dead_mutex);
+				}
+				pthread_mutex_unlock(&data->dead_mutex);
+				return ;
 			}
-			if (phil->data->must_eat != -1
-				&& phil[i].eat_count < phil->data->must_eat)
+			pthread_mutex_lock(&phil[i].meal_mutex);
+			eat_count = phil[i].eat_count;
+			pthread_mutex_unlock(&phil[i].meal_mutex);
+			if (data->must_eat != -1 && eat_count < data->must_eat)
 				all_ate_enough = 0;
 		}
-		if (phil->data->must_eat != -1 && all_ate_enough)
+		if (all_ate_enough && data->must_eat != -1)
 		{
-			phil->data->dead_flag = 1;
-			break ;
+			pthread_mutex_lock(&data->dead_mutex);
+			data->dead_flag = 1;
+			pthread_mutex_unlock(&data->dead_mutex);
+			return ;
 		}
 		usleep(1000);
 	}
@@ -87,11 +110,12 @@ int	start_simulation(t_phil *phil)
 	{
 		if (pthread_create(&threads[i], NULL, philo_routine, &phil[i]))
 		{
-			destroy_mutex_data(phil->data, phil->data->num_philos);
+			clean_destroy_all(phil);
 			return (ft_free(phil->data->forks, phil, threads), print_error(4),
 				0);
 		}
 	}
+	usleep(1500);
 	monitor(phil);
 	i = -1;
 	while (++i < phil->data->num_philos)
