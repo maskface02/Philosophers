@@ -21,6 +21,7 @@ typedef struct s_data
 {
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	write_mutex;
+	pthread_mutex_t	dead_mutex;
 	int				dead_flag;
 	long			start_time;
 	int				num_philos;
@@ -34,8 +35,8 @@ typedef struct s_data
 typedef struct s_phil
 {
 	int				id;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*first_fork;
+	pthread_mutex_t	*second_fork;
 	long			last_meal_time;
 	int				eat_count;
 	t_data			*data;
@@ -47,14 +48,14 @@ void				destroy_main_mutexes(t_data *data);
 void				destroy_mutex_data(t_data *data, int fork_index);
 void				print_error(int x);
 long				ft_atol(char *arg);
-int	        init_philosophers(t_data data, t_phil **phil);
+int					init_philosophers(t_data *data, t_phil **phil);
 int					create_forks(t_data *data);
 void				ft_free(void *ptr1, void *ptr2, void *ptr3);
 long				get_current_time(void);
 void				log_message(t_phil *phil, char *msg);
 int					take_forks(t_phil *phil);
 void				release_forks(t_phil *phil);
-void        eat(t_phil *phil);
-int	        start_simulation(t_phil *phil);
-void        clean_destroy_all(t_phil *phil);
-
+void				eat(t_phil *phil);
+int					start_simulation(t_phil *phil);
+void				clean_destroy_all(t_phil *phil);
+int					is_dead(t_data *data);

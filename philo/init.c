@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "philo.h"
 
 int	init_data(t_data *data, char **av)
@@ -28,28 +27,61 @@ int	init_data(t_data *data, char **av)
 		return (0);
 	if (pthread_mutex_init(&data->meal_mutex, NULL))
 		return (pthread_mutex_destroy(&data->write_mutex), 0);
+	if (pthread_mutex_init(&data->dead_mutex, NULL))
+		return (pthread_mutex_destroy(&data->write_mutex),
+			pthread_mutex_destroy(&data->dead_mutex), 0);
 	return (1);
 }
 
-int	init_philosophers(t_data data, t_phil **phil)
+int	init_philosophers(t_data *data, t_phil **phil)
 {
 	int	i;
 
-	*phil = malloc(data.num_philos * sizeof(t_phil));
+	*phil = malloc(data->num_philos * sizeof(t_phil));
 	if (!*phil)
 		return (print_error(3), 0);
 	i = -1;
-	while (++i < data.num_philos)
+	while (++i < data->num_philos)
 	{
 		(*phil)[i].id = i + 1;
-		(*phil)[i].left_fork = &data.forks[i];
-		(*phil)[i].right_fork = &data.forks[(i + 1) % data.num_philos];
-		(*phil)[i].last_meal_time = data.start_time;
+		(*phil)[i].first_fork = &data->forks[i];
+		(*phil)[i].second_fork = &data->forks[(i + 1) % data->num_philos];
+		(*phil)[i].last_meal_time = data->start_time;
 		(*phil)[i].eat_count = 0;
-		(*phil)[i].data = &data;
+		(*phil)[i].data = data;
 	}
 	return (1);
 }
+/*int	init_philosophers(t_data *data, t_phil **phil)
+{
+  int right_idx;
+  int left_idx;
+  int i;
+	*phil = malloc(data->num_philos * sizeof(t_phil));
+	if (!*phil)
+		return (print_error(3), 0);
+	i = -1;
+	while (++i < data->num_philos)
+	{
+		(*phil)[i].id = i + 1;
+		left_idx = i;
+		right_idx = (i + 1) % data->num_philos;
+		if (left_idx < right_idx)
+		{
+			(*phil)[i].first_fork = &data->forks[left_idx];
+			(*phil)[i].second_fork = &data->forks[right_idx];
+		}
+		else
+		{
+			(*phil)[i].first_fork = &data->forks[right_idx];
+			(*phil)[i].second_fork = &data->forks[left_idx];
+		}
+		(*phil)[i].last_meal_time = data->start_time;
+		(*phil)[i].eat_count = 0;
+		(*phil)[i].data = data;
+	}
+	return (1);
+}*/
 
 int	create_forks(t_data *data)
 {

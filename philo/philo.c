@@ -39,7 +39,7 @@ int	main(int ac, char **av)
 			return (print_error(2), 1);
 		if (!create_forks(&data))
 			return (1);
-		if (!init_philosophers(data , &philos))
+		if (!init_philosophers(&data , &philos))
 			return (1);
     if (!start_simulation(philos))
       return (1);
