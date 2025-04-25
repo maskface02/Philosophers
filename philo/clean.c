@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h>
 
 void  destroy_main_mutexes(t_data *data)
 {
   pthread_mutex_destroy(&data->meal_mutex);
   pthread_mutex_destroy(&data->write_mutex);
+  pthread_mutex_destroy(&data->dead_mutex);
+
 }
 
 void  destroy_mutex_data(t_data *data, int start_index)

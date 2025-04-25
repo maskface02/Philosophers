@@ -31,11 +31,9 @@ int is_dead(t_data *data)
 
 void	*one_philo_routine(t_phil *phil)
 {
-	//pthread_mutex_lock(phil->left_fork);
 	log_message(phil, "has taken a fork");
 	while (!is_dead(phil->data))
 		usleep(1000);
-	//pthread_mutex_unlock(phil->left_fork);
 	return (NULL);
 }
 
@@ -50,7 +48,7 @@ void	*philo_routine(void *arg)
 	if (phil->data->num_philos == 1)
 		return (one_philo_routine(phil));
 	if (phil->id % 2 == 0)
-		usleep(phil->data->time_to_eat * 1000);
+		usleep(1000);
 	while (1)
 	{
 		if (!take_forks(phil))
@@ -62,7 +60,8 @@ void	*philo_routine(void *arg)
 			break ;
 		log_message(phil, "is sleeping");
 		usleep(phil->data->time_to_sleep * 1000);
-		log_message(phil, "is thinking");
+    log_message(phil, "is thinking");
+    usleep(phil->data->time_to_think * 1000);
 	}
 	return (NULL);
 }
@@ -70,7 +69,7 @@ void	*philo_routine(void *arg)
 void	monitor(t_phil *phil)
 {
 	long	(last_meal), (eat_count), (all_ate_enough), (i);
-	while (!phil->data->dead_flag)
+	while (!is_dead(phil->data))
 	{
 		all_ate_enough = 1;
 		i = -1;
@@ -97,6 +96,7 @@ void	monitor(t_phil *phil)
 		usleep(1000);
 	}
 }
+
 int	start_simulation(t_phil *phil)
 {
 	pthread_t *(threads);

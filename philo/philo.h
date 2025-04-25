@@ -28,6 +28,7 @@ typedef struct s_data
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+  int       time_to_think;
 	int				must_eat;
 	pthread_mutex_t	meal_mutex;
 }					t_data;

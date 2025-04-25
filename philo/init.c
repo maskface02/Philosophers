@@ -30,33 +30,20 @@ int	init_data(t_data *data, char **av)
 	if (pthread_mutex_init(&data->dead_mutex, NULL))
 		return (pthread_mutex_destroy(&data->write_mutex),
 			pthread_mutex_destroy(&data->dead_mutex), 0);
+	data->time_to_think = 0;
+	if (data->num_philos % 2 == 1)
+	{
+		if (data->time_to_eat > data->time_to_sleep)
+			data->time_to_think = data->time_to_eat;
+		else if (data->time_to_sleep == data->time_to_eat)
+			data->time_to_think = data->time_to_eat / 2;
+	}
 	return (1);
 }
 
 int	init_philosophers(t_data *data, t_phil **phil)
 {
-	int	i;
-
-	*phil = malloc(data->num_philos * sizeof(t_phil));
-	if (!*phil)
-		return (print_error(3), 0);
-	i = -1;
-	while (++i < data->num_philos)
-	{
-		(*phil)[i].id = i + 1;
-		(*phil)[i].first_fork = &data->forks[i];
-		(*phil)[i].second_fork = &data->forks[(i + 1) % data->num_philos];
-		(*phil)[i].last_meal_time = data->start_time;
-		(*phil)[i].eat_count = 0;
-		(*phil)[i].data = data;
-	}
-	return (1);
-}
-/*int	init_philosophers(t_data *data, t_phil **phil)
-{
-  int right_idx;
-  int left_idx;
-  int i;
+	int (right_idx), (left_idx), (i);
 	*phil = malloc(data->num_philos * sizeof(t_phil));
 	if (!*phil)
 		return (print_error(3), 0);
@@ -81,7 +68,7 @@ int	init_philosophers(t_data *data, t_phil **phil)
 		(*phil)[i].data = data;
 	}
 	return (1);
-}*/
+}
 
 int	create_forks(t_data *data)
 {
