@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
+/*   By: zatais <zatais@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 22:57:46 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/18 22:14:23 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/27 16:00:11 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,44 +19,47 @@
 
 typedef struct s_data
 {
-	pthread_mutex_t	*forks;
-	pthread_mutex_t	write_mutex;
-	pthread_mutex_t	dead_mutex;
+	int				must_eat;
 	int				dead_flag;
-	long			start_time;
 	int				num_philos;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
-  int       time_to_think;
-	int				must_eat;
+	int				time_to_think;
+	long			start_time;
+	pthread_mutex_t	*forks;
+	pthread_mutex_t	dead_mutex;
+	pthread_mutex_t	write_mutex;
 	pthread_mutex_t	meal_mutex;
 }					t_data;
 
 typedef struct s_phil
 {
 	int				id;
+	int				eat_count;
+	t_data			*data;
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
 	long			last_meal_time;
-	int				eat_count;
-	t_data			*data;
 }					t_phil;
 
-int					check_args(int ac, char **av);
-int					init_data(t_data *data, char **av);
-void				destroy_main_mutexes(t_data *data);
-void				destroy_mutex_data(t_data *data, int fork_index);
+void				eat(t_phil *phil);
 void				print_error(int x);
 long				ft_atol(char *arg);
-int					init_philosophers(t_data *data, t_phil **phil);
-int					create_forks(t_data *data);
-void				ft_free(void *ptr1, void *ptr2, void *ptr3);
+int					is_dead(t_data *data);
 long				get_current_time(void);
-void				log_message(t_phil *phil, char *msg);
 int					take_forks(t_phil *phil);
+int					create_forks(t_data *data);
 void				release_forks(t_phil *phil);
-void				eat(t_phil *phil);
+void				set_dead_flag(t_data *data);
+int					check_args(int ac, char **av);
 int					start_simulation(t_phil *phil);
 void				clean_destroy_all(t_phil *phil);
-int					is_dead(t_data *data);
+int					init_data(t_data *data, char **av);
+void				destroy_main_mutexes(t_data *data);
+void				log_message(t_phil *phil, char *msg);
+void				ft_free(void *ptr1, void *ptr2, void *ptr3);
+int					init_philosophers(t_data *data, t_phil **phil);
+void				destroy_mutex_data(t_data *data, int fork_index);
+void				set_meal(long *last_meal, long *eat_count, t_phil *phil,
+						int i);

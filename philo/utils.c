@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zatais <zatais@email.com>                  +#+  +:+       +#+        */
+/*   By: zatais <zatais@student.1337.ma>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 23:46:39 by zatais            #+#    #+#             */
-/*   Updated: 2025/04/19 01:23:31 by zatais           ###   ########.fr       */
+/*   Updated: 2025/04/27 15:46:22 by zatais           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ long	get_current_time(void)
 
 void	log_message(t_phil *phil, char *msg)
 {
-	t_data	*data;// like this !!
 	long	timestamp;
+	t_data	*data;
 
-	data = phil->data;// !!
+	data = phil->data;
 	pthread_mutex_lock(&data->write_mutex);
 	if (!is_dead(phil->data))
 	{
