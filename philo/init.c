@@ -36,7 +36,7 @@ int	init_data(t_data *data, char **av)
 		if (data->time_to_eat > data->time_to_sleep)
 			data->time_to_think = data->time_to_eat;
 		else if (data->time_to_sleep == data->time_to_eat)
-			data->time_to_think = data->time_to_eat / 2;
+			data->time_to_think = data->time_to_eat;
 	}
 	return (1);
 }
@@ -63,7 +63,6 @@ int	init_philosophers(t_data *data, t_phil **phil)
 			(*phil)[i].first_fork = &data->forks[right_idx];
 			(*phil)[i].second_fork = &data->forks[left_idx];
 		}
-		(*phil)[i].last_meal_time = data->start_time;
 		(*phil)[i].eat_count = 0;
 		(*phil)[i].data = data;
 	}

@@ -10,12 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <limits.h>
-#include <pthread.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <unistd.h>
+#ifndef PHILO_H
+# define PHILO_H
+
+# include <limits.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <unistd.h>
 
 typedef struct s_data
 {
@@ -38,9 +41,9 @@ typedef struct s_phil
 	int				id;
 	int				eat_count;
 	t_data			*data;
+	long			last_meal_time;
 	pthread_mutex_t	*first_fork;
 	pthread_mutex_t	*second_fork;
-	long			last_meal_time;
 }					t_phil;
 
 void				eat(t_phil *phil);
@@ -63,3 +66,4 @@ int					init_philosophers(t_data *data, t_phil **phil);
 void				destroy_mutex_data(t_data *data, int fork_index);
 void				set_meal(long *last_meal, long *eat_count, t_phil *phil,
 						int i);
+#endif

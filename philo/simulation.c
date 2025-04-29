@@ -30,8 +30,8 @@ void	*philo_routine(void *arg)
 	pthread_mutex_unlock(&phil->data->meal_mutex);
 	if (phil->data->num_philos == 1)
 		return (one_philo_routine(phil));
-	if (phil->id % 2 == 0)
-		usleep(1000);
+	if (!(phil->id % 2))
+		usleep(phil->data->time_to_eat * 1000);
 	while (1)
 	{
 		if (!take_forks(phil))
@@ -59,7 +59,7 @@ void	monitor(t_phil *phil)
 		while (++i < phil->data->num_philos)
 		{
 			set_meal(&last_meal, &eat_count, phil, i);
-			if ((get_current_time() - last_meal) > phil->data->time_to_die)
+			if ((get_current_time() - last_meal) >= phil->data->time_to_die)
 			{
 				log_message(&phil[i], "died");
 				set_dead_flag(phil->data);
