@@ -49,6 +49,18 @@ void	*philo_routine(void *arg)
 	return (NULL);
 }
 
+void	dead_log_message(t_phil *phil, char *msg)
+{
+	long	timestamp;
+	t_data	*data;
+
+	data = phil->data;
+	pthread_mutex_lock(&data->write_mutex);
+	timestamp = get_current_time() - data->start_time;
+	printf("%ld %d %s\n", timestamp, phil->id, msg);
+	pthread_mutex_unlock(&data->write_mutex);
+}
+
 void	monitor(t_phil *phil)
 {
 	long (last_meal), (eat_count), (all_ate_enough), (i);
@@ -61,8 +73,8 @@ void	monitor(t_phil *phil)
 			set_meal(&last_meal, &eat_count, phil, i);
 			if ((get_current_time() - last_meal) >= phil->data->time_to_die)
 			{
-				log_message(&phil[i], "died");
 				set_dead_flag(phil->data);
+				dead_log_message(&phil[i], "died");
 				break ;
 			}
 			if (phil->data->must_eat != -1 && eat_count < phil->data->must_eat)
