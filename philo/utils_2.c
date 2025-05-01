@@ -29,10 +29,33 @@ int	is_dead(t_data *data)
 	return (is_dead);
 }
 
-void	set_meal(long *last_meal, long *eat_count, t_phil *phil, int i)
+void	set_meal(long *last_meal, int *eat_count, t_phil *phil, int i)
 {
 	pthread_mutex_lock(&phil->data->meal_mutex);
 	*last_meal = phil[i].last_meal_time;
 	*eat_count = phil[i].eat_count;
 	pthread_mutex_unlock(&phil->data->meal_mutex);
+}
+
+void	dead_log_message(t_phil *phil, char *msg)
+{
+	long	timestamp;
+	t_data	*data;
+
+	data = phil->data;
+	pthread_mutex_lock(&data->write_mutex);
+	timestamp = get_current_time() - data->start_time;
+	printf("%ld %d %s\n", timestamp, phil->id, msg);
+	pthread_mutex_unlock(&data->write_mutex);
+}
+
+int	check_dead(t_phil *phil, long last_meal, int i)
+{
+	if ((get_current_time() - last_meal) >= phil->data->time_to_die)
+	{
+		set_dead_flag(phil->data);
+		dead_log_message(&phil[i], "died");
+		return (1);
+	}
+	return (0);
 }

@@ -43,15 +43,17 @@ int	init_data(t_data *data, char **av)
 
 int	init_philosophers(t_data *data, t_phil **phil)
 {
-	int (right_idx), (left_idx), (i);
+	int	right_idx;
+	int	left_idx;
+	int	i;
+
 	*phil = malloc(data->num_philos * sizeof(t_phil));
 	if (!*phil)
 		return (print_error(3), 0);
 	i = -1;
 	while (++i < data->num_philos)
 	{
-		(*phil)[i].id = i + 1;
-		left_idx = i;
+		(1) && ((*phil)[i].id = i + 1, left_idx = i);
 		right_idx = (i + 1) % data->num_philos;
 		if (left_idx < right_idx)
 		{
@@ -63,8 +65,7 @@ int	init_philosophers(t_data *data, t_phil **phil)
 			(*phil)[i].first_fork = &data->forks[right_idx];
 			(*phil)[i].second_fork = &data->forks[left_idx];
 		}
-		(*phil)[i].eat_count = 0;
-		(*phil)[i].data = data;
+		(1) && ((*phil)[i].eat_count = 0, (*phil)[i].data = data);
 	}
 	return (1);
 }
