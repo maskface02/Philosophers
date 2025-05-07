@@ -29,10 +29,10 @@ int	is_dead(t_data *data)
 	return (is_dead);
 }
 
-void	set_meal(long *last_meal, int *eat_count, t_phil *phil, int i)
+void	set_meal(long *meal_time, int *eat_count, t_phil *phil, int i)
 {
 	pthread_mutex_lock(&phil->data->meal_mutex);
-	*last_meal = phil[i].last_meal_time;
+	*meal_time = phil[i].meal_time;
 	*eat_count = phil[i].eat_count;
 	pthread_mutex_unlock(&phil->data->meal_mutex);
 }

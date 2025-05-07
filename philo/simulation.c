@@ -25,9 +25,6 @@ void	*philo_routine(void *arg)
 	t_phil	*phil;
 
 	phil = (t_phil *)arg;
-	pthread_mutex_lock(&phil->data->meal_mutex);
-	phil->last_meal_time = get_current_time();
-	pthread_mutex_unlock(&phil->data->meal_mutex);
 	if (phil->data->num_philos == 1)
 		return (one_philo_routine(phil));
 	if (!(phil->id % 2))
@@ -77,6 +74,15 @@ void	monitor(t_phil *phil)
 	}
 }
 
+void	init_meal_time(t_phil *phil)
+{
+	int	i;
+
+	i = -1;
+	while (++i < phil->data->num_philos)
+		(phil + i)->meal_time = get_current_time();
+}
+
 int	start_simulation(t_phil *phil)
 {
 	pthread_t	*threads;
@@ -87,6 +93,7 @@ int	start_simulation(t_phil *phil)
 	if (!threads)
 		return (print_error(3), 0);
 	phil->data->start_time = get_current_time();
+	init_meal_time(phil);
 	while (++i < phil->data->num_philos)
 	{
 		if (pthread_create(&threads[i], NULL, philo_routine, &phil[i]))
@@ -96,8 +103,7 @@ int	start_simulation(t_phil *phil)
 	monitor(phil);
 	i = -1;
 	while (++i < phil->data->num_philos)
-		if (pthread_join(threads[i], NULL))
-			return (clean_destroy_all(phil), print_error(5), 0);
+		pthread_join(threads[i], NULL);
 	free(threads);
 	return (1);
 }

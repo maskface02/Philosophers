@@ -58,7 +58,7 @@ int	take_forks(t_phil *phil)
 void	eat(t_phil *phil)
 {
 	pthread_mutex_lock(&phil->data->meal_mutex);
-	phil->last_meal_time = get_current_time();
+	phil->meal_time = get_current_time();
 	phil->eat_count++;
 	pthread_mutex_unlock(&phil->data->meal_mutex);
 	log_message(phil, "is eating");

@@ -32,12 +32,8 @@ int	init_data(t_data *data, char **av)
 			pthread_mutex_destroy(&data->dead_mutex), 0);
 	data->time_to_think = 0;
 	if (data->num_philos % 2 == 1)
-	{
-		if (data->time_to_eat > data->time_to_sleep)
+		if (data->time_to_eat >= data->time_to_sleep)
 			data->time_to_think = data->time_to_eat;
-		else if (data->time_to_sleep == data->time_to_eat)
-			data->time_to_think = data->time_to_eat;
-	}
 	return (1);
 }
 
