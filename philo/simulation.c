@@ -60,7 +60,7 @@ void	monitor(t_phil *phil)
 		while (++i < phil->data->num_philos)
 		{
 			set_meal(&last_meal, &eat_count, phil, i);
-			if (check_dead(phil, last_meal, i))
+			if (check_death(phil, last_meal, i))
 				break ;
 			if (phil->data->must_eat != -1 && eat_count < phil->data->must_eat)
 				all_ate_enough = 0;
@@ -70,7 +70,6 @@ void	monitor(t_phil *phil)
 			set_dead_flag(phil->data);
 			break ;
 		}
-		usleep(1000);
 	}
 }
 
@@ -91,7 +90,8 @@ int	start_simulation(t_phil *phil)
 	i = -1;
 	threads = malloc(phil->data->num_philos * sizeof(pthread_t));
 	if (!threads)
-		return (print_error(3), 0);
+		return (destroy_mutex_data(phil->data, phil->data->num_philos),
+			free(phil->data->forks), print_error(3), 0);
 	phil->data->start_time = get_current_time();
 	init_meal_time(phil);
 	while (++i < phil->data->num_philos)
@@ -99,7 +99,6 @@ int	start_simulation(t_phil *phil)
 		if (pthread_create(&threads[i], NULL, philo_routine, &phil[i]))
 			return (clean_destroy_all(phil), print_error(4), 0);
 	}
-	usleep(1000);
 	monitor(phil);
 	i = -1;
 	while (++i < phil->data->num_philos)

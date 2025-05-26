@@ -63,7 +63,7 @@ void				destroy_main_mutexes(t_data *data);
 void				log_message(t_phil *phil, char *msg);
 void				ft_free(void *ptr1, void *ptr2, void *ptr3);
 int					init_philosophers(t_data *data, t_phil **phil);
-int					check_dead(t_phil *phil, long last_meal, int i);
+int					check_death(t_phil *phil, long last_meal, int i);
 void				destroy_mutex_data(t_data *data, int fork_index);
 void				set_meal(long *meal_time, int *eat_count, t_phil *phil,
 						int i);

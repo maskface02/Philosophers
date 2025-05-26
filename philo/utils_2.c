@@ -37,7 +37,7 @@ void	set_meal(long *meal_time, int *eat_count, t_phil *phil, int i)
 	pthread_mutex_unlock(&phil->data->meal_mutex);
 }
 
-void	dead_log_message(t_phil *phil, char *msg)
+void	death_log_message(t_phil *phil, char *msg)
 {
 	long	timestamp;
 	t_data	*data;
@@ -49,12 +49,12 @@ void	dead_log_message(t_phil *phil, char *msg)
 	pthread_mutex_unlock(&data->write_mutex);
 }
 
-int	check_dead(t_phil *phil, long last_meal, int i)
+int	check_death(t_phil *phil, long last_meal, int i)
 {
 	if ((get_current_time() - last_meal) >= phil->data->time_to_die)
 	{
 		set_dead_flag(phil->data);
-		dead_log_message(&phil[i], "died");
+		death_log_message(&phil[i], "died");
 		return (1);
 	}
 	return (0);

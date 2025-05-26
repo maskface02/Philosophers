@@ -45,21 +45,19 @@ int	init_philosophers(t_data *data, t_phil **phil)
 
 	*phil = malloc(data->num_philos * sizeof(t_phil));
 	if (!*phil)
-		return (print_error(3), 0);
+		return (destroy_mutex_data(data, (*phil)->data->num_philos),
+			free(data->forks), print_error(3), 0);
 	i = -1;
 	while (++i < data->num_philos)
 	{
 		(1) && ((*phil)[i].id = i + 1, left_idx = i);
 		right_idx = (i + 1) % data->num_philos;
+		(*phil)[i].first_fork = &data->forks[right_idx];
+		(*phil)[i].second_fork = &data->forks[left_idx];
 		if (left_idx < right_idx)
 		{
 			(*phil)[i].first_fork = &data->forks[left_idx];
 			(*phil)[i].second_fork = &data->forks[right_idx];
-		}
-		else
-		{
-			(*phil)[i].first_fork = &data->forks[right_idx];
-			(*phil)[i].second_fork = &data->forks[left_idx];
 		}
 		(1) && ((*phil)[i].eat_count = 0, (*phil)[i].data = data);
 	}
@@ -76,6 +74,7 @@ int	create_forks(t_data *data)
 	i = -1;
 	while (++i < data->num_philos)
 		if (pthread_mutex_init(&data->forks[i], NULL))
-			return (destroy_mutex_data(data, i), 0);
+			return (destroy_mutex_data(data, i), free(data->forks),
+				print_error(2), 0);
 	return (1);
 }

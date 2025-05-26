@@ -22,8 +22,6 @@ void	print_error(int x)
 		printf("Error: allocation failure\n");
 	else if (x == 4)
 		printf("Error: unable to create a Thread\n");
-	else if (x == 5)
-		printf("Error: deadlock was detected\n");
 	else
 		printf("Error : invalid arguments\n");
 }

@@ -26,10 +26,8 @@ void	destroy_mutex_data(t_data *data, int start_index)
 		pthread_mutex_destroy(&data->forks[start_index]);
 }
 
-void	ft_free(void *ptr1, void *ptr2, void *ptr3)
+void	ft_free(void *ptr1, void *ptr2)
 {
-	if (ptr3)
-		free(ptr3);
 	free(ptr1);
 	free(ptr2);
 }
